@@ -430,53 +430,20 @@ function getReasonText(styleKeys, jobKey) {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "radial-gradient(circle at top, rgba(250, 204, 21, 0.18), transparent 24%), linear-gradient(180deg, #081427 0%, #09182f 45%, #050b14 100%)",
+    background:
+      "radial-gradient(circle at top, rgba(250, 204, 21, 0.18), transparent 24%), linear-gradient(180deg, #081427 0%, #09182f 45%, #050b14 100%)",
     padding: "24px 12px",
     color: "#ffffff",
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
     boxSizing: "border-box",
   },
-  phoneShell: {
+  appWrap: {
     width: "100%",
-    maxWidth: 430,
+    maxWidth: 720,
     margin: "0 auto",
-    borderRadius: 36,
-    padding: 12,
-    background: "linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))",
-    border: "1px solid rgba(255,255,255,0.12)",
-    boxShadow: "0 30px 80px rgba(0,0,0,0.46)",
-    backdropFilter: "blur(12px)",
-  },
-  phoneInner: {
-    position: "relative",
-    minHeight: 860,
-    borderRadius: 28,
-    overflow: "hidden",
-    border: "1px solid rgba(255,255,255,0.10)",
-    background: [
-      "radial-gradient(circle at top left, rgba(251,191,36,0.18), transparent 24%)",
-      "radial-gradient(circle at top right, rgba(34,197,94,0.10), transparent 22%)",
-      "linear-gradient(180deg, #11243a 0%, #0d1726 48%, #0a1018 100%)",
-    ].join(", "),
-  },
-  notch: {
-    position: "absolute",
-    top: 0,
-    left: "50%",
-    transform: "translateX(-50%)",
-    width: 138,
-    height: 26,
-    borderBottomLeftRadius: 18,
-    borderBottomRightRadius: 18,
-    background: "rgba(6, 11, 20, 0.98)",
-    zIndex: 10,
-  },
-  content: {
-    minHeight: 860,
-    padding: "34px 16px 24px",
-    boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
+    gap: 20,
   },
   topbar: {
     display: "flex",
@@ -907,17 +874,6 @@ const styles = {
   },
 };
 
-function PhoneFrame({ children }) {
-  return (
-    <div style={styles.phoneShell}>
-      <div style={styles.phoneInner}>
-        <div style={styles.notch} />
-        <div style={styles.content}>{children}</div>
-      </div>
-    </div>
-  );
-}
-
 function IgarashiPanel({ message, compact = false }) {
   return (
     <div style={styles.card}>
@@ -976,7 +932,9 @@ function IntroScreen({ onStart }) {
         </div>
       </div>
 
-      <button type="button" style={styles.primaryButton} onClick={onStart}>✨ {igarashiLines.intro.cta}</button>
+      <button type="button" style={styles.primaryButton} onClick={onStart}>
+        ✨ {igarashiLines.intro.cta}
+      </button>
     </div>
   );
 }
@@ -1023,7 +981,16 @@ function ResultScreen({ scores, answers, onRestart }) {
   return (
     <div style={styles.screenBody}>
       <div style={styles.heroWrap}>
-        <div style={{ ...styles.heroBadge, background: "rgba(52,211,153,0.18)", border: "1px solid rgba(52,211,153,0.24)", color: "#86efac" }}>Diagnosis Complete</div>
+        <div
+          style={{
+            ...styles.heroBadge,
+            background: "rgba(52,211,153,0.18)",
+            border: "1px solid rgba(52,211,153,0.24)",
+            color: "#86efac"
+          }}
+        >
+          Diagnosis Complete
+        </div>
         <h2 style={{ ...styles.heroTitle, fontSize: 30 }}>おすすめスタイルが見つかりました</h2>
         <p style={styles.heroText}>回答内容から、相性の良いスタイルとジョブを算出しました。</p>
       </div>
@@ -1042,9 +1009,7 @@ function ResultScreen({ scores, answers, onRestart }) {
           </div>
           <div style={styles.pointBadge}>{topStyles[0]?.score || 0} pt</div>
         </div>
-        <p style={styles.bodyText}>
-  {styleMeta[mainStyle]?.desc}
-</p>
+        <p style={styles.bodyText}>{styleMeta[mainStyle]?.desc}</p>
       </div>
 
       <div style={styles.sectionCard}>
@@ -1074,7 +1039,9 @@ function ResultScreen({ scores, answers, onRestart }) {
               </div>
             </div>
             {subJob && subJob !== mainJob ? (
-              <p style={{ ...styles.bodyText, marginBottom: 12 }}>副属性: <strong style={{ color: "#ffffff" }}>{jobMeta[subJob]?.label}</strong></p>
+              <p style={{ ...styles.bodyText, marginBottom: 12 }}>
+                副属性: <strong style={{ color: "#ffffff" }}>{jobMeta[subJob]?.label}</strong>
+              </p>
             ) : null}
             <p style={styles.bodyText}>{job.description}</p>
           </div>
@@ -1091,7 +1058,10 @@ function ResultScreen({ scores, answers, onRestart }) {
       <div style={styles.sectionCard}>
         <h3 style={styles.sectionTitle}>今回の回答ログ</h3>
         {answers.map((entry, idx) => (
-          <div key={`${entry.questionId}-${idx}`} style={styles.answerItem}><span style={{ color: "rgba(255,255,255,0.42)", marginRight: 8 }}>Q{idx + 1}</span>{entry.label}</div>
+          <div key={`${entry.questionId}-${idx}`} style={styles.answerItem}>
+            <span style={{ color: "rgba(255,255,255,0.42)", marginRight: 8 }}>Q{idx + 1}</span>
+            {entry.label}
+          </div>
         ))}
       </div>
 
@@ -1144,7 +1114,7 @@ export default function App() {
 
   return (
     <div style={styles.page}>
-      <PhoneFrame>
+      <div style={styles.appWrap}>
         <div style={styles.topbar}>
           <div>
             <div style={styles.eyebrow}>Craft Beer Guild</div>
@@ -1154,9 +1124,13 @@ export default function App() {
         </div>
 
         {screen === "intro" && <IntroScreen onStart={handleStart} />}
-        {screen === "question" && currentQuestion && <QuestionScreen question={currentQuestion} onChoose={handleChoose} progress={progress} />}
-        {screen === "result" && <ResultScreen scores={scores} answers={answers} onRestart={handleRestart} />}
-      </PhoneFrame>
+        {screen === "question" && currentQuestion && (
+          <QuestionScreen question={currentQuestion} onChoose={handleChoose} progress={progress} />
+        )}
+        {screen === "result" && (
+          <ResultScreen scores={scores} answers={answers} onRestart={handleRestart} />
+        )}
+      </div>
     </div>
   );
 }
