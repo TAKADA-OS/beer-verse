@@ -133,6 +133,7 @@ const jobMeta = {
 
 const guildMasterPortrait = "https://o-sesame.co.jp/beerverse/images/guild-master.png";
 const beerStyleImageBase = "https://o-sesame.co.jp/beerverse/images/beer-style/";
+const jobImageBase = "https://o-sesame.co.jp/beerverse/images/job/";
 
 const styleImages = {
   pilsner: `${beerStyleImageBase}01_pilsner.jpg`,
@@ -152,6 +153,14 @@ const styleImages = {
   imperialStout: `${beerStyleImageBase}15_imperial_stout.jpg`,
   barleyWine: `${beerStyleImageBase}16_barley_wine.jpg`,
   barrelAged: `${beerStyleImageBase}17_barrel_aged.jpg`,
+};
+
+const jobImages = {
+  tank: `${jobImageBase}guardian.jpg`,
+  mage: `${jobImageBase}mage.jpg`,
+  fighter: `${jobImageBase}fighter.jpg`,
+  ranger: `${jobImageBase}ranger.jpg`,
+  alchemist: `${jobImageBase}alchemist.jpg`,
 };
 
 const igarashiLines = {
@@ -430,8 +439,7 @@ function getReasonText(styleKeys, jobKey) {
 const styles = {
   page: {
     minHeight: "100vh",
-    background:
-      "radial-gradient(circle at top, rgba(250, 204, 21, 0.18), transparent 24%), linear-gradient(180deg, #081427 0%, #09182f 45%, #050b14 100%)",
+    background: "radial-gradient(circle at top, rgba(250, 204, 21, 0.18), transparent 24%), linear-gradient(180deg, #081427 0%, #09182f 45%, #050b14 100%)",
     padding: "24px 12px",
     color: "#ffffff",
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
@@ -725,17 +733,6 @@ const styles = {
     fontSize: 22,
     fontWeight: 800,
   },
-  styleRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 12,
-    padding: 16,
-    borderRadius: 18,
-    border: "1px solid rgba(255,255,255,0.10)",
-    background: "rgba(0,0,0,0.20)",
-    marginBottom: 12,
-  },
   rank: {
     fontSize: 11,
     letterSpacing: "0.2em",
@@ -818,6 +815,7 @@ const styles = {
     display: "block",
     border: "1px solid rgba(255,255,255,0.08)",
   },
+  
   jobBorder: (a, b) => ({
     borderRadius: 24,
     padding: 1,
@@ -831,7 +829,8 @@ const styles = {
   jobHeader: {
     display: "flex",
     alignItems: "center",
-    gap: 12,
+    justifyContent: "space-between",
+    gap: 20,
     marginBottom: 16,
   },
   jobIcon: (a, b) => ({
@@ -846,11 +845,11 @@ const styles = {
     boxShadow: "0 12px 24px rgba(0,0,0,0.22)",
     flexShrink: 0,
   }),
-  bodyText: {
-    margin: 0,
-    fontSize: 14,
-    lineHeight: 1.8,
-    color: "rgba(255,255,255,0.74)",
+  jobImageInline: {
+    width: 280,
+    borderRadius: 16,
+    objectFit: "cover",
+    border: "1px solid rgba(255,255,255,0.1)",
   },
   reasonItem: {
     padding: "12px 14px",
@@ -932,9 +931,7 @@ function IntroScreen({ onStart }) {
         </div>
       </div>
 
-      <button type="button" style={styles.primaryButton} onClick={onStart}>
-        ✨ {igarashiLines.intro.cta}
-      </button>
+      <button type="button" style={styles.primaryButton} onClick={onStart}>✨ {igarashiLines.intro.cta}</button>
     </div>
   );
 }
@@ -981,16 +978,7 @@ function ResultScreen({ scores, answers, onRestart }) {
   return (
     <div style={styles.screenBody}>
       <div style={styles.heroWrap}>
-        <div
-          style={{
-            ...styles.heroBadge,
-            background: "rgba(52,211,153,0.18)",
-            border: "1px solid rgba(52,211,153,0.24)",
-            color: "#86efac"
-          }}
-        >
-          Diagnosis Complete
-        </div>
+        <div style={{ ...styles.heroBadge, background: "rgba(52,211,153,0.18)", border: "1px solid rgba(52,211,153,0.24)", color: "#86efac" }}>Diagnosis Complete</div>
         <h2 style={{ ...styles.heroTitle, fontSize: 30 }}>おすすめスタイルが見つかりました</h2>
         <p style={styles.heroText}>回答内容から、相性の良いスタイルとジョブを算出しました。</p>
       </div>
@@ -1030,20 +1018,32 @@ function ResultScreen({ scores, answers, onRestart }) {
       <div style={styles.sectionCard}>
         <div style={styles.jobBorder(job.colorA, job.colorB)}>
           <div style={styles.jobInner}>
+
             <div style={styles.jobHeader}>
-              <div style={styles.jobIcon(job.colorA, job.colorB)}>{job.icon}</div>
-              <div>
-                <div style={{ ...styles.rank, color: "rgba(255,255,255,0.52)" }}>Main Job</div>
-                <div style={{ fontSize: 28, fontWeight: 800 }}>{job.label}</div>
-                <div style={styles.styleCategory}>{job.sub}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={styles.jobIcon(job.colorA, job.colorB)}>{job.icon}</div>
+                <div>
+                  <div style={{ ...styles.rank, color: "rgba(255,255,255,0.52)" }}>Main Job</div>
+                  <div style={{ fontSize: 28, fontWeight: 800 }}>{job.label}</div>
+                  <div style={styles.styleCategory}>{job.sub}</div>
+                </div>
               </div>
+
+              <img
+                src={jobImages[mainJob]}
+                alt={job.label}
+                style={styles.jobImageInline}
+              />
             </div>
-            {subJob && subJob !== mainJob ? (
+
+            {subJob && subJob !== mainJob && (
               <p style={{ ...styles.bodyText, marginBottom: 12 }}>
                 副属性: <strong style={{ color: "#ffffff" }}>{jobMeta[subJob]?.label}</strong>
               </p>
-            ) : null}
+            )}
+
             <p style={styles.bodyText}>{job.description}</p>
+
           </div>
         </div>
       </div>
@@ -1124,12 +1124,8 @@ export default function App() {
         </div>
 
         {screen === "intro" && <IntroScreen onStart={handleStart} />}
-        {screen === "question" && currentQuestion && (
-          <QuestionScreen question={currentQuestion} onChoose={handleChoose} progress={progress} />
-        )}
-        {screen === "result" && (
-          <ResultScreen scores={scores} answers={answers} onRestart={handleRestart} />
-        )}
+        {screen === "question" && currentQuestion && <QuestionScreen question={currentQuestion} onChoose={handleChoose} progress={progress} />}
+        {screen === "result" && <ResultScreen scores={scores} answers={answers} onRestart={handleRestart} />}
       </div>
     </div>
   );
