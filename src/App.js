@@ -828,9 +828,9 @@ const styles = {
   },
   jobHeader: {
     display: "flex",
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-between",
-    gap: 20,
+    gap: 12,
     marginBottom: 16,
   },
   jobIcon: (a, b) => ({
@@ -971,7 +971,6 @@ function ResultScreen({ scores, answers, onRestart }) {
   const topStyles = rankedStyles.slice(0, 3);
   const mainStyle = topStyles[0]?.key || "paleAle";
   const mainJob = rankedJobs[0]?.key || "fighter";
-  const subJob = rankedJobs[1]?.key || null;
   const job = jobMeta[mainJob];
   const reasons = getReasonText(topStyles.map((item) => item.key), mainJob);
 
@@ -1018,15 +1017,11 @@ function ResultScreen({ scores, answers, onRestart }) {
       <div style={styles.sectionCard}>
         <div style={styles.jobBorder(job.colorA, job.colorB)}>
           <div style={styles.jobInner}>
-
             <div style={styles.jobHeader}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={styles.jobIcon(job.colorA, job.colorB)}>{job.icon}</div>
-                <div>
-                  <div style={{ ...styles.rank, color: "rgba(255,255,255,0.52)" }}>Main Job</div>
-                  <div style={{ fontSize: 28, fontWeight: 800 }}>{job.label}</div>
-                  <div style={styles.styleCategory}>{job.sub}</div>
-                </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ ...styles.rank, color: "rgba(255,255,255,0.52)" }}>Main Job</div>
+                <div style={{ fontSize: 28, fontWeight: 800 }}>{job.label}</div>
+                <div style={styles.styleCategory}>{job.sub}</div>
               </div>
 
               <img
@@ -1036,14 +1031,7 @@ function ResultScreen({ scores, answers, onRestart }) {
               />
             </div>
 
-            {subJob && subJob !== mainJob && (
-              <p style={{ ...styles.bodyText, marginBottom: 12 }}>
-                副属性: <strong style={{ color: "#ffffff" }}>{jobMeta[subJob]?.label}</strong>
-              </p>
-            )}
-
             <p style={styles.bodyText}>{job.description}</p>
-
           </div>
         </div>
       </div>
